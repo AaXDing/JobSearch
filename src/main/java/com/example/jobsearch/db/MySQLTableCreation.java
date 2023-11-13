@@ -134,7 +134,6 @@ public class MySQLTableCreation {
 
             start = System.currentTimeMillis();
 
-            // query TODO
             List<String> list1 = new ArrayList<>();
 
 //            for (int i = 0; i < 100; i++) {
