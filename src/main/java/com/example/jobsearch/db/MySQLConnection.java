@@ -36,15 +36,14 @@ public class MySQLConnection {
             System.err.println("DB connection failed");
             return;
         }
-        String insertItemSql = "INSERT IGNORE INTO items VALUES (?, ?, ?, ?, ?)"; //"?" : placeholder, columns
+        String insertItemSql = "INSERT IGNORE INTO items VALUES (?, ?, ?, ?)"; //"?" : placeholder, columns
         //ignore: if there's a same item existed, we ignore it
         try {
             PreparedStatement statement = conn.prepareStatement(insertItemSql);
             statement.setString(1, item.getId());
             statement.setString(2, item.getTitle());
             statement.setString(3, item.getLocation());
-            statement.setString(4, item.getCompanyLogo());
-            statement.setString(5, item.getUrl()); //SQL starts from 1, not 0
+            statement.setString(4, item.getUrl()); //SQL starts from 1, not 0
             statement.executeUpdate(); //insert data completed
         } catch (SQLException e) {
             e.printStackTrace();
@@ -138,12 +137,14 @@ public class MySQLConnection {
                 statement.setString(1, itemId);
                 ResultSet rs = statement.executeQuery();
                 if (rs.next()) {
-                    favoriteItems.add(new Item(rs.getString("item_id")
+                    favoriteItems.add(new Item(rs.getString("job_id")
                             ,rs.getString("name")
-                            ,rs.getString("address")
-                            ,rs.getString("image_url")
-                            ,rs.getString("url")
                             ,null
+                            ,rs.getString("address")
+                            ,null
+                            ,null
+                            ,null
+                            ,rs.getString("url")
                             , getKeywords(itemId)
                             ,true));
 

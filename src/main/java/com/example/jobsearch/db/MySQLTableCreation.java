@@ -44,7 +44,6 @@ public class MySQLTableCreation {
                     + "item_id VARCHAR(255) NOT NULL,"
                     + "name VARCHAR(255),"
                     + "address VARCHAR(255),"
-                    + "image_url VARCHAR(255),"
                     + "url VARCHAR(255),"
                     + "PRIMARY KEY (item_id)" //primary key for items
                     + ")";

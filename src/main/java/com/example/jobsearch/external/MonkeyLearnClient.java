@@ -22,59 +22,60 @@ public class MonkeyLearnClient {
 
     public List<Set<String>> extract(List<String> articles){ //input : multiple texts; output: list of text's keywords, set makes all keywords unique
         //The Java ObjectMapper is part of the Jackson library
-        ObjectMapper mapper = new ObjectMapper();
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-
-        HttpPost request = new HttpPost(EXTRACT_URL);
-        request.setHeader("Content-type", "application/json");
-        request.setHeader("Authorization", "Token " + AUTH_TOKEN);
-        ExtractRequestBody body = new ExtractRequestBody(articles, 3);
-
-        String jsonBody;
-        //transfer body to json
-        try {
-            //.writeValueAsSting turns Java to Json
-            jsonBody = mapper.writeValueAsString(body);
-        } catch (JsonProcessingException e) {
-            return Collections.emptyList();
-        }
-
-
-
-        try {
-            request.setEntity(new StringEntity(jsonBody));
-        } catch (UnsupportedEncodingException e) {
-            return Collections.emptyList();
-        }
-        //transfer response to the type we want, in this case, response --> List<Set<String>>
-        ResponseHandler<List<Set<String>>> responseHandler = response -> {
-            if (response.getStatusLine().getStatusCode() != 200) {
-                return Collections.emptyList();
-            }
-            HttpEntity entity = response.getEntity();
-            if (entity == null) {
-                return Collections.emptyList(); //
-            }
-            //.readValue turns Json to Java
-            ExtractResponseItem[] results = mapper.readValue(entity.getContent(), ExtractResponseItem[].class);
-            List<Set<String>> keywordList = new ArrayList<>();
-            //transfer the extracted keywords to List<Set<String>>
-            for (ExtractResponseItem result : results) {
-                Set<String> keywords = new HashSet<>();
-                for (Extraction extraction : result.extractions) {
-                    keywords.add(extraction.parsedValue);
-                }
-                keywordList.add(keywords);
-            }
-            return keywordList;
-        };
-
-        try {
-            return httpClient.execute(request, responseHandler);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return Collections.emptyList();
+//        ObjectMapper mapper = new ObjectMapper();
+//        CloseableHttpClient httpClient = HttpClients.createDefault();
+//
+//        HttpPost request = new HttpPost(EXTRACT_URL);
+//        request.setHeader("Content-type", "application/json");
+//        request.setHeader("Authorization", "Token " + AUTH_TOKEN);
+//        ExtractRequestBody body = new ExtractRequestBody(articles);
+//
+//        String jsonBody;
+//        //transfer body to json
+//        try {
+//            //.writeValueAsSting turns Java to Json
+//            jsonBody = mapper.writeValueAsString(body);
+//        } catch (JsonProcessingException e) {
+//            return Collections.emptyList();
+//        }
+//
+//
+//
+//        try {
+//            request.setEntity(new StringEntity(jsonBody));
+//        } catch (UnsupportedEncodingException e) {
+//            return Collections.emptyList();
+//        }
+//        //transfer response to the type we want, in this case, response --> List<Set<String>>
+//        ResponseHandler<List<Set<String>>> responseHandler = response -> {
+//            if (response.getStatusLine().getStatusCode() != 200) {
+//                return Collections.emptyList();
+//            }
+//            HttpEntity entity = response.getEntity();
+//            if (entity == null) {
+//                return Collections.emptyList(); //
+//            }
+//            //.readValue turns Json to Java
+//            ExtractResponseItem[] results = mapper.readValue(entity.getContent(), ExtractResponseItem[].class);
+//            List<Set<String>> keywordList = new ArrayList<>();
+//            //transfer the extracted keywords to List<Set<String>>
+//            for (ExtractResponseItem result : results) {
+//                Set<String> keywords = new HashSet<>();
+//                for (Extraction extraction : result.extractions) {
+//                    keywords.add(extraction.parsedValue);
+//                }
+//                keywordList.add(keywords);
+//            }
+//            return keywordList;
+//        };
+//
+//        try {
+//            return httpClient.execute(request, responseHandler);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return Collections.emptyList();
 
     }
 

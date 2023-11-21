@@ -5,14 +5,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class ExtractRequestBody {
-    public List<String> data;
+    public String text;
 
     @JsonProperty("max_keywords")
     public int maxKeywords;
 
-    public ExtractRequestBody(List<String> data, int maxKeywords) {
-        this.data = data;
-        this.maxKeywords = maxKeywords;
+    public String language = "en";
+
+    public String providers = "nlpcloud";
+
+    @JsonProperty("response_as_dict")
+    public boolean responseAsDict = true;
+
+    public ExtractRequestBody(String text) {
+        this.text = text;
     }
 
 }

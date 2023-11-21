@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,25 +15,29 @@ import java.util.Set;
 public class Item {
     private String id;
     private String title;
-    private String location;
-    private String companyLogo;
-    private String url;
-    private String description;
+    private String company_name;
 
-    private Set<String> keywords; //provided by GitHub
-    private boolean favorite; //user like and collect job positions
+    private String location;
+    private String via;
+    private String description;
+    private List<String> job_highlights;
+    private String url;
+    private Set<String> keywords;
+    private boolean favorite;
 
 
     public Item() {
     }
 
-    public Item(String id, String title, String location, String companyLogo, String url, String description, Set<String> keywords, boolean favorite) {
+    public Item(String id, String title, String company_name, String location, String via, String description, List<String> job_highlights, String url, Set<String> keywords, boolean favorite) {
         this.id = id;
         this.title = title;
+        this.company_name = company_name;
         this.location = location;
-        this.companyLogo = companyLogo;
-        this.url = url;
+        this.via = via;
         this.description = description;
+        this.job_highlights = job_highlights;
+        this.url = url;
         this.keywords = keywords;
         this.favorite = favorite;
     }
@@ -48,26 +53,32 @@ public class Item {
 
         return title;
     }
+    @JsonProperty("companey_name")
+    public String getCompanyName() {
+        return company_name;
+    }
     @JsonProperty("location")
     public String getLocation() {
 
         return location;
     }
-    @JsonProperty("company_logo") //if we don't add_, then it will be different from our expectation from GitHub
-    //necessary for camel case conversions, otherwise it won't appear in the response
-    public String getCompanyLogo() {
-
-        return companyLogo;
-    }
-    @JsonProperty("url")
-    public String getUrl() {
-
-        return url;
+    @JsonProperty("via")
+    public String getVia() {
+        return via;
     }
     @JsonProperty("description")
     public String getDescription() {
 
         return description;
+    }
+    @JsonProperty("job_highlights")
+    public List<String> getJobHighlights() {
+        return job_highlights;
+    }
+    @JsonProperty("url")
+    public String getUrl() {
+
+        return url;
     }
 
     public Set<String> getKeywords() {
@@ -97,16 +108,18 @@ public class Item {
         return favorite == item.favorite &&
                 Objects.equals(id, item.id) &&
                 Objects.equals(title, item.title) &&
+                Objects.equals(company_name, item.company_name) &&
                 Objects.equals(location, item.location) &&
-                Objects.equals(companyLogo, item.companyLogo) &&
-                Objects.equals(url, item.url) &&
+                Objects.equals(via, item.via) &&
                 Objects.equals(description, item.description) &&
+                Objects.equals(job_highlights, item.job_highlights) &&
+                Objects.equals(url, item.url) &&
                 Objects.equals(keywords, item.keywords);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, location, companyLogo, url, description, keywords, favorite);
+        return Objects.hash(id, title, company_name, location, via, description, job_highlights, url, keywords, favorite);
     }
 
     @Override
@@ -114,10 +127,12 @@ public class Item {
         return "item{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
+                ", company_name='" + company_name + '\'' +
                 ", location='" + location + '\'' +
-                ", companyLogo='" + companyLogo + '\'' +
-                ", url='" + url + '\'' +
+                ", via='" + via + '\'' +
                 ", description='" + description + '\'' +
+                ", jo='" + job_highlights + '\'' +
+                ", url='" + url + '\'' +
                 ", keywords=" + keywords +
                 ", favorite=" + favorite +
                 '}';
