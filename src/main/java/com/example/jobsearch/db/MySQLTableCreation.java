@@ -80,17 +80,17 @@ public class MySQLTableCreation {
             sql = "INSERT INTO users VALUES('1111', '3229c1097c00d497a0fd282d586be050', 'John', 'Smith')";
             statement.executeUpdate(sql);
 
-            long start = System.currentTimeMillis();
-            List<String> list = new ArrayList<>();
-            for (int i = 0; i < 100; i++) {
-                sql = "INSERT INTO users VALUES (" + i + ", " + "'3229c1097c00d497a0fd282d586be050', " + "'John', " + "'Smith')";
-                list.add(sql);
-//                Statement statement1 = conn.createStatement();
-//                statement1.executeUpdate(sql);
-            }
+//            long start = System.currentTimeMillis();
+//            List<String> list = new ArrayList<>();
+//            for (int i = 0; i < 100; i++) {
+//                sql = "INSERT INTO users VALUES (" + i + ", " + "'3229c1097c00d497a0fd282d586be050', " + "'John', " + "'Smith')";
+//                list.add(sql);
+////                Statement statement1 = conn.createStatement();
+////                statement1.executeUpdate(sql);
+//            }
             conn.close();
 
-            System.out.println("Latency111: " + (System.currentTimeMillis()- start));
+//            System.out.println("Latency111: " + (System.currentTimeMillis()- start));
 
 //            List<CompletableFuture<Void>> toBeDone =
 //            list.stream().map(sql1-> {
@@ -124,24 +124,24 @@ public class MySQLTableCreation {
 //                }
 //            });
 
-            System.out.println("Latency222: " + (System.currentTimeMillis()- start));
-            System.out.println("Import done successfully");
-
-
-            long end  = System.currentTimeMillis();
-            System.out.println("Latency: " + (end - start));
-
-            start = System.currentTimeMillis();
-
-            List<String> list1 = new ArrayList<>();
-
-//            for (int i = 0; i < 100; i++) {
-//                list1.add("SELECT * FROM users WHERE user_id = " + i);
-//            }
-
-            List<ResultSet> query_return = new ArrayList<>();
-
-            System.out.println("Query Latency " + (System.currentTimeMillis() - start));
+//            System.out.println("Latency222: " + (System.currentTimeMillis()- start));
+//            System.out.println("Import done successfully");
+//
+//
+//            long end  = System.currentTimeMillis();
+//            System.out.println("Latency: " + (end - start));
+//
+//            start = System.currentTimeMillis();
+//
+//            List<String> list1 = new ArrayList<>();
+//
+////            for (int i = 0; i < 100; i++) {
+////                list1.add("SELECT * FROM users WHERE user_id = " + i);
+////            }
+//
+//            List<ResultSet> query_return = new ArrayList<>();
+//
+//            System.out.println("Query Latency " + (System.currentTimeMillis() - start));
 
 //            for (int i = 0; i < 100; i++){
 //                String sql1 = "SELECT * FROM users WHERE user_id = " + i;
@@ -171,7 +171,7 @@ public class MySQLTableCreation {
 //                }
 //            );
 
-            System.out.println("Latency111 " + (System.currentTimeMillis() - start));
+//            System.out.println("Latency111 " + (System.currentTimeMillis() - start));
 //            for (int i = 0; i < 100; i++) {
 //                if (query_return.get(i).next()) {
 //                    String user_id = query_return.get(i).getString("user_id");
@@ -180,7 +180,7 @@ public class MySQLTableCreation {
 //                }
 //            }
 //            System.out.println(query_return.size());
-            System.out.println("Latency " + (System.currentTimeMillis() - start));
+//            System.out.println("Latency " + (System.currentTimeMillis() - start));
 
 
         } catch (Exception e) {
