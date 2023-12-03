@@ -12,7 +12,7 @@ public class ExtractRequestBody {
 
     public String language = "en";
 
-    public String providers = "nlpcloud";
+    public String providers = "ibm";
 
     @JsonProperty("response_as_dict")
     public boolean responseAsDict = true;

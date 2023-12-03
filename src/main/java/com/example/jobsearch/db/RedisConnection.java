@@ -3,9 +3,9 @@ package com.example.jobsearch.db;
 import redis.clients.jedis.Jedis;
 
 public class RedisConnection {
-    private static final String INSTANCE = "34.220.227.98";
+    private static final String INSTANCE = "54.219.196.105";
     private static final int PORT = 6379; //redis default port
-    private static final String PASSWORD = "12345678";
+    private static final String PASSWORD = "password"; // This is the password
     private static final String SEARCH_KEY_TEMPLATE = "search:lat=%s&lon=%s&keyword=%s";
     private static final String FAVORITE_KEY_TEMPLATE = "history:userId=%s";
 
@@ -63,6 +63,12 @@ public class RedisConnection {
     }
     public static void main(String[] args) {
         RedisConnection c = new RedisConnection();
+        c.setFavoriteResult("1234", "aaaa");
+        System.out.println(c.getFavoriteResult("1234"));
+        c.deleteFavoriteResult("1234");
+        System.out.println(c.getFavoriteResult("1234"));
+        c.setSearchResult(1, 2, "123", "aaa");
+        System.out.println(c.getSearchResult(1, 2, "123"));
     }
 }
 

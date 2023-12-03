@@ -1,5 +1,6 @@
 package com.example.jobsearch.servlet;
 
+import com.example.jobsearch.external.SerpAPIClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.jobsearch.db.MySQLConnection;
 import com.example.jobsearch.entity.Item;
@@ -50,7 +51,7 @@ public class SearchServlet extends HttpServlet {
 //        if (cachedResult != null) {
 //            items = Arrays.asList(mapper.readValue(cachedResult, Item[].class)); //Jackson can only convert items to array, but we need to convert array to list
 //        } else { //is cache is missed, then we still fetch data from GitHub
-        GitHubClient client = new GitHubClient();
+        SerpAPIClient client = new SerpAPIClient();
         items = client.search(lat, lon, null);
 //            redis.setSearchResult(lat, lon, null, mapper.writeValueAsString(items));
 //        }

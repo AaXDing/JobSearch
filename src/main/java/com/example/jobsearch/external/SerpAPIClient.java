@@ -16,14 +16,14 @@ import java.net.URLEncoder;
 import java.util.*;
 
 public class SerpAPIClient {
-    private static final String URL_TEMPLATE = "https://serpapi.com/search.json?engine=google_jobs&q=%s&hl=en&api_key=%s";  //%s : String 占位符
+    private static final String URL_TEMPLATE = "https://serpapi.com/search?engine=google_jobs&q=%s&uule=%s&api_key=%s";  //%s : String 占位符
 
     private static final String API_KEY = "7604ca6dc69829ef3740854510601bc59f364e59299a590d061b50df48b35c08";
 
     public static void main(String[] args) {
         SerpAPIClient client = new SerpAPIClient();
 
-        List<Item> list = client.search("90024", "software engineer");
+        List<Item> list = client.search(40.714224,-2.961452, "software engineer");
         for (Item item: list) {
             System.out.println(item.getKeywords());
             break;
@@ -32,7 +32,7 @@ public class SerpAPIClient {
 
     private static final String DEFAULT_KEYWORD = "engineer";
 
-    public List<Item> search(String zipcode, String keyword) {
+    public List<Item> search(Double lat, Double lon, String keyword) {
         if (keyword == null) {
             keyword = DEFAULT_KEYWORD; //if keyword == null, give it a DEFAULT_KEYWORD
         }
@@ -43,9 +43,14 @@ public class SerpAPIClient {
             e.printStackTrace();
         }
 
+        String address = "";
+
 //        System.out.println("Keyword Parsed");
 
-        String url = String.format(URL_TEMPLATE, keyword + "+" + zipcode, API_KEY); //format URL from above
+        GeoConverterClient converterClient = new GeoConverterClient();
+        String uuleCode = converterClient.convert(lat, lon);
+
+        String url = String.format(URL_TEMPLATE, keyword, uuleCode, API_KEY); //format URL from above
 
         CloseableHttpClient httpClient = HttpClients.createDefault(); //create a new httpclient object
 
@@ -79,7 +84,7 @@ public class SerpAPIClient {
             while (result.hasNext()) {
                 JsonNode itemNode = result.next();
                 Item item = extract(itemNode);
-//                System.out.println(item.toString());
+                System.out.println(item.toString());
                 items.add(item);
             }
 
@@ -138,10 +143,11 @@ public class SerpAPIClient {
     }
 
     private static void extractKeywords(List<Item> items) {
-        NLPCloudClient client = new NLPCloudClient();
+        EdenAI client = new EdenAI();
         for (Item item: items) {
             String article = item.getDescription() + ". " + String.join(". ", item.getJobHighlights());
-            Set<String> keywords = client.extract(article);
+            Set<String> keywords = new HashSet<>();
+            keywords.addAll(client.extract(article, 3));
             keywords.addAll(item.getKeywords());
             item.setKeywords(keywords);
         }

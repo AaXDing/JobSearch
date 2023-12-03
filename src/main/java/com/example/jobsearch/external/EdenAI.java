@@ -23,15 +23,15 @@ public class EdenAI {
     private static final String EXTRACT_URL = "https://api.edenai.run/v2/text/keyword_extraction";
 
     public static void main(String[] args) {
-        String s = "";
+        String s = "Software Engineer(s)\\n\\nSocial Media App (React JS and Node JS only...\\n\\nThis is a part-time, equity-only position at this stage. IF you want to be part of a new start-up establishing a new social media paradigm and use case read on!\\n\\nThis is not position for on the job learning. We want someone who has all the technical answers.\\n\\nThe Venue platform is a digital social platform creating a new paradigm for all commercial communities which involves physical interaction. Examples of such communities include malls, stadiums, resorts, amusement parks, exhibition events, festivals, compounds, etc. We aim to provide owners, operators, and managers with the tools to engage in real-time interaction with visitors, who are provided with a better-engaged experience with targeted real-time information and offerings. The goal is to increase visitor engagement, satisfaction, and transaction outcomes.\\n\\nWe are seeking highly skilled and motivated Software Engineer(s) to join our dynamic team in the development of a cutting-edge social media application. As a Software Engineer, you will play a key role in designing, implementing, and maintaining features for the app, with a primary focus on React JS for the front end and Node JS for the back end. Our initial platform design is available in Figma.\\n\\nResponsibilities:\\n\\nFront-End Development:\\n• Utilize React JS to design and implement interactive user interfaces with a focus on performance and responsiveness.\\n• Collaborate with UX/UI designers to create a visually appealing and user-friendly experience.\\n• Implement state management solutions and integrate with back-end services.\\n\\nBack-End Development:\\n• Develop server-side logic using Node JS to handle user authentication, data storage, and API integrations.\\n• Design and implement RESTful APIs to facilitate communication between the front end and back end.\\n• Collaborate with database administrators to optimize database queries and ensure efficient data storage.\\n\\nFull-Stack Development:\\n• Work on both the front-end and back-end aspects of the application to ensure seamless integration.\\n• Implement security best practices to protect user data and privacy.\\n• Collaborate with cross-functional teams to define and implement new features.\\n\\nCode Quality and Testing:\\n• Write clean, maintainable, and well-documented code.\\n• Conduct thorough testing of both front-end and back-end components to ensure reliability and robustness.\\n• Participate in code reviews to provide constructive feedback and ensure code quality standards are met.\\n\\nPerformance Optimization:\\n• Identify and address performance bottlenecks in both front-end and back-end components.\\n• Implement optimization techniques to enhance the overall speed and responsiveness of the application.\\n\\nCollaboration:\\n• Collaborate with product managers, designers, and other stakeholders to understand requirements and translate them into technical specifications.\\n• Work closely with other team members to ensure a cohesive and integrated development process.\\n\\nRequirements:\\n• Bachelor's degree in Computer Science, Software Engineering, or a related field.\\n• Proven experience as a Software Engineer with a focus on React JS and Node JS.\\n• Strong proficiency in JavaScript, HTML, and CSS.\\n• Experience with front-end frameworks/libraries (e.g., Redux, TypeScript) and back-end frameworks (e.g., Express).\\n• Knowledge of RESTful API design and integration.\\n• Familiarity with database systems such as MongoDB or SQL databases.\\n• Understanding of version control systems, preferably Git.\\n• Excellent problem-solving and communication skills.\\n• Ability to work both independently and collaboratively in a team environment.\\n• Up-to-date knowledge of industry trends and best practices.\\n\\nIf you are passionate about creating innovative and engaging social media experiences and possess the technical skills required for this role, we encourage you to apply and be a part of our exciting journey in building the next generation of social media platforms.\\n\\n2.5% of Newco. Subsequent to funding a full-time role with cash compensation would be possible.\\n\\nIf this opportunity resonates, the next step would be to reach out and we can arrange a call to discuss further";
 
         EdenAI client = new EdenAI();
 
-        Set<String> keywordSet = client.extract(s);
-
+        Set<String> keywordSet = client.extract(s, 3);
+        System.out.println(keywordSet);
     }
 
-    public Set<String> extract(String article) {
+    public Set<String> extract(String article, int keywords_num) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         ObjectMapper mapper = new ObjectMapper();
 
@@ -71,23 +71,34 @@ public class EdenAI {
                 return Collections.emptySet();
             }
             JsonNode root = mapper.readTree(entity.getContent()); //get content till nlpcloud's items
-            JsonNode nlpcloud = root.get("nlpcloud");
+            JsonNode ibm = root.get("ibm");
 
-            System.out.println(nlpcloud.asText());
+            System.out.println(ibm.asText());
 
-            JsonNode nlpclouditems = nlpcloud.get("items");
+            JsonNode ibmitems = ibm.get("items");
 
-            Set<String> keywords = new HashSet<>();
-            Iterator<JsonNode> itemsIterator = nlpclouditems.elements();
+            TreeMap<Double, ArrayList<String>> keywords = new TreeMap<>();
+            Iterator<JsonNode> itemsIterator = ibmitems.elements();
             //Read Value and store in keywords set
             while (itemsIterator.hasNext()) {
                 JsonNode itemNode = itemsIterator.next();
                 String keyword = itemNode.get("keyword").asText();
-                keywords.add(keyword);
-                System.out.println(keyword);
+                double importance = itemNode.get("importance").asDouble();
+                ArrayList<String> words_list = keywords.getOrDefault(importance, new ArrayList<String>());
+                words_list.add(keyword);
+                keywords.put(importance, words_list);
             }
 
-            return keywords;
+            Set<String> refined_set = new HashSet<>();
+
+            while (refined_set.size() < keywords_num && !keywords.isEmpty()) {
+                ArrayList<String> words_list = keywords.pollLastEntry().getValue();
+                while (!words_list.isEmpty() && refined_set.size() < keywords_num) {
+                    refined_set.add(words_list.remove(0));
+                }
+            }
+
+            return refined_set;
         };
 
 //        System.out.println("Response Handler Created");

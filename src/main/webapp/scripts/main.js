@@ -208,8 +208,8 @@
 
         var opt = {
             method: 'GET',
-            //url: './search?user_id=' + userId + '&lat=' + lat + '&lon=' + lng,
-            url: './example_job',
+            url: './search?user_id=' + userId + '&lat=' + lat + '&lon=' + lng,
+            // url: './search',
             data: null,
             message: 'nearby'
         }

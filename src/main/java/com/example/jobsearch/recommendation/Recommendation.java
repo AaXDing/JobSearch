@@ -1,9 +1,11 @@
 package com.example.jobsearch.recommendation;
 
+import com.example.jobsearch.external.SerpAPIClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.example.jobsearch.db.MySQLConnection;
 import com.example.jobsearch.entity.Item;
 import com.example.jobsearch.external.GitHubClient;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.*;
 
@@ -11,7 +13,7 @@ public class Recommendation {
     public List<Item> recommendItems(String userId, double lat, double lon) {
         List<Item> recommendedItems = new ArrayList<>();
 
-        // Step 1, get all favorited itemids
+//         Step 1, get all favorited itemids
         MySQLConnection connection = new MySQLConnection();
         Set<String> favoritedItemIds = connection.getFavoriteItemIds(userId);
 
@@ -39,7 +41,7 @@ public class Recommendation {
 
         // Step 3, search based on keywords, filter out favorite items
         Set<String> visitedItemIds = new HashSet<>();
-        GitHubClient client = new GitHubClient();
+        SerpAPIClient client = new SerpAPIClient();
         ObjectMapper mapper = new ObjectMapper();
         //RedisConnection redis = new RedisConnection();
         //check Redis is missed or not

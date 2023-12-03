@@ -117,7 +117,7 @@ public class NLPCloudClient {
                 JsonNode itemNode = item_it.next();
                 String keyword = itemNode.asText();
                 keywords.add(keyword);
-//                System.out.println(keyword);
+                System.out.println(keyword);
             }
 
             return keywords;
